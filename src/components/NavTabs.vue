@@ -1,52 +1,42 @@
 <template>
-  <v-tabs
-    v-model="activeTab"
-    align-with-title
-    color="#212121"
-    :mandatory="false"
-    right
-  >
-    <v-tabs-slider v-show="showSlider" color="#82B1FF"></v-tabs-slider>
-    <v-tab
-      key="Home"
-      style="visibility: hidden;"
-      to="/"
-    />
-    <v-tab
-      v-for="tab in tabs"
-      :key="tab.name"
-      :href="tab.path"
-      :to="tab"
-      exact
-      ripple
-    >
-      {{ tab.name }}
-    </v-tab>
-  </v-tabs>
+  <nav class="nav-tabs" v-if="isLoggedIn">
+    <router-link to="/" class="nav-link">Home</router-link>
+    <router-link to="/task" class="nav-link">Task</router-link>
+    <router-link to="/service-call" class="nav-link">Service Call</router-link>
+    <!-- Tambahkan link untuk halaman profile jika diperlukan -->
+    <router-link to="/profile" class="nav-link">Profile</router-link>
+  </nav>
 </template>
 
 <script>
-import { routes as tabs } from "@/pages";
-
-const activeTab = tabs.find(tab =>
-    window.location.pathname.includes(tab.href || tab.path)
-);
+import { mapState } from 'vuex';
 
 export default {
-    // color="#f5f5f5" = light tabs
-    data() {
-        return {
-            activeTab: (activeTab && activeTab.name) || "Home",
-            tabs: tabs.filter(tab => tab.name !== "Home")
-        };
-    },
-    computed: {
-        showSlider: function() {
-            return this.activeTab !== "Home" && this.activeTab !== "/";
-        }
-    }
+  name: 'NavTabs',
+  computed: {
+    ...mapState({
+      isLoggedIn: state => !!state.user  // Ganti dengan properti isLoggedIn yang sesuai dengan state Anda
+    })
+  }
 };
 </script>
 
-<style>
+<style scoped>
+.nav-tabs {
+  background-color: #007BFF; /* Warna biru untuk tab */
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 30px;
+}
+
+.nav-link {
+  margin-right: 10px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
 </style>

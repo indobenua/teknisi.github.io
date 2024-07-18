@@ -1,137 +1,58 @@
 <template>
-  <v-app dark class="app">
-    <NavDrawer @set-drawer="setDrawer" :isVisible="drawer"/>
-    <Header @set-drawer="setDrawer"/>
-    <v-content fluid>
-      <router-view></router-view>
-    </v-content>
-    <Footer/>
-  </v-app>
+    <div id="app">
+        <Header />
+        <NavTabs />
+        <router-view></router-view>
+        <div>
+            <span class="icon-plus danger" @click="openModal">
+                <i class="fas fa-plus-circle"></i>
+            </span>
+            <Modal v-if="isModalVisible" @close="closeModal" @success="handleSuccess" />
+        </div>
+    </div>
 </template>
 
 <script>
-import Footer from "./components/Footer";
-import Header from "./components/Header";
-import NavDrawer from "./components/NavDrawer";
+import Header from '@/components/Header.vue';
+import NavTabs from '@/components/NavTabs.vue';
+import { mapActions } from 'vuex';
+import Modal from '@/components/Modal.vue';
+import axios from '@/utils/axios';
 
 export default {
-    name: "App",
+    name: 'App',
     components: {
-        Footer,
         Header,
-        NavDrawer
+        NavTabs,
+        Modal
     },
     data() {
         return {
-            drawer: false
+            isModalVisible: false,
         };
     },
+    created() {
+        this.fetchUser();
+        this.$axios = axios;
+    },
     methods: {
-        setDrawer(visibility) {
-            this.drawer = visibility;
-        }
+        openModal() {
+            this.isModalVisible = true;
+        },
+        closeModal() {
+            this.isModalVisible = false;
+        },
+        handleSuccess(data) {
+            console.log('Reminder added successfully:', data);
+            // Handle success, e.g., refresh list, show toast, etc.
+        },
+        ...mapActions(['fetchUser'])
     }
 };
 </script>
 
 <style>
-html {
-    overflow: auto !important;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    /* font-size: 1.15rem; */
-    font-size: 100%;
-    min-height: 100vh;
-}
-
-.app {
-    flex: 1;
-}
-
-@media only screen and (max-width: 768px) {
-    .display-2 {
-        font-size: 2.4rem !important;
-    }
-
-    .display-3 {
-        font-size: 2.8rem !important;
-    }
-
-    .display-4 {
-        font-size: 3.2rem !important;
-    }
-}
-
-/*
-@media only screen and (min-width: 1024px) {
-    html {
-        font-size: 16px;
-    }
-}
-
-@media only screen and (min-width: 1360px) {
-    html {
-        font-size: 18px;
-    }
-}
-
-@media only screen and (min-width: 1600px) {
-    html {
-        font-size: 20px;
-    }
-}
-
-@media only screen and (min-width: 1900px) {
-    html {
-        font-size: 22px;
-    }
-}
-*/
-
-@media (min-width: 48rem) {
-    :root {
-        font-size: calc(1rem + ((1vw - 0.55rem)));
-    }
-
-    [class^="v-"] {
-        font-size: 97%;
-    }
-}
-
-@media only screen and (min-width: 1900px) {
-    html {
-        font-size: 22px;
-    }
-}
-
-@media (min-width: 48rem) {
-    :root {
-        font-size: calc(1rem + ((1vw - 0.55rem)));
-    }
-
-    [class^="v-"] {
-        font-size: 97%;
-    }
-}
-
-.app {
-    flex: 1;
-}
-
-@media only screen and (max-width: 768px) {
-    .display-2 {
-        font-size: 2.4rem !important;
-    }
-
-    .display-3 {
-        font-size: 2.8rem !important;
-    }
-
-    .display-4 {
-        font-size: 3.2rem !important;
-    }
+#app {
+    font-family: Arial, sans-serif;
 }
 </style>
