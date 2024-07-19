@@ -24,6 +24,5 @@ yarn-error.log*
 
 # config
 *.json
-*.js
 *.sh
-run_deploy_jalankan_untuk_build_script.bat
+*.bat
